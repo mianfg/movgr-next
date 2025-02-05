@@ -1,0 +1,40 @@
+{
+    "cSpell.words": ["clsx", "Frontmatter"],
+    /*"[prisma]": {
+      "editor.defaultFormatter": "Prisma.prisma"
+    },*/
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.formatOnSave": true,
+    "editor.codeActionsOnSave": {
+      "source.fixAll": "always",
+      "source.fixAll.eslint": "always",
+      "source.organizeImports": "always"
+    },
+    "editor.tabSize": 2,
+    "[css]": {
+      "editor.formatOnSave": false
+    },
+    "[scss]": {
+      "editor.formatOnSave": false
+    },
+    "files.eol": "\n",
+    "eslint.validate": [
+      "javascript",
+      "javascriptreact",
+      "typescript",
+      "typescriptreact"
+    ],
+    "[typescript]": {
+      "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "[typescriptreact]": {
+      "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "[javascript]": {
+      "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "[javascriptreact]": {
+      "editor.defaultFormatter": "esbenp.prettier-vscode"
+    }
+  }
+  

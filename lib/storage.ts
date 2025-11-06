@@ -80,7 +80,7 @@ export function toggleFavoriteParadaBus(parada: ParadaBus): boolean {
 
   const favorites = getFavoriteParadasBus();
   const index = favorites.findIndex(p => p.id === parada.id);
-  
+
   if (index > -1) {
     // Remove from favorites
     favorites.splice(index, 1);

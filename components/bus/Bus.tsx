@@ -1,7 +1,10 @@
 "use client";
 
+import { Button } from "@/components/ui/button";
 import { LlegadasBus, ParadaBus } from "@/interfaces/bus";
 import { getLlegadasBus } from "@/lib/bus";
+import { getFavoriteParadasBus, isFavoriteParadaBus, toggleFavoriteParadaBus } from "@/lib/storage";
+import { Star } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { LlegadasBusScroll } from "./LlegadasBusScroll";
@@ -18,17 +21,36 @@ export function Bus({ initialParada }: BusProps) {
   const [selectedParada, setSelectedParada] = useState<ParadaBus | undefined>(initialParada);
   const [isOnline, setIsOnline] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
+  const [isFavorite, setIsFavorite] = useState(false);
+  const [favorites, setFavorites] = useState<ParadaBus[]>([]);
 
   const handleParadaChange = (newParada: ParadaBus | undefined) => {
     setSelectedParada(newParada);
     const params = new URLSearchParams(searchParams.toString());
     if (newParada) {
       params.set('id', newParada.id.toString());
+      setIsFavorite(isFavoriteParadaBus(newParada.id));
     } else {
       params.delete('id');
+      setIsFavorite(false);
     }
     router.push(`/bus?${params.toString()}`);
   };
+
+  const handleToggleFavorite = () => {
+    if (selectedParada) {
+      const newFavoriteState = toggleFavoriteParadaBus(selectedParada);
+      setIsFavorite(newFavoriteState);
+      setFavorites(getFavoriteParadasBus());
+    }
+  };
+
+  useEffect(() => {
+    setFavorites(getFavoriteParadasBus());
+    if (selectedParada) {
+      setIsFavorite(isFavoriteParadaBus(selectedParada.id));
+    }
+  }, [selectedParada]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -56,11 +78,29 @@ export function Bus({ initialParada }: BusProps) {
 
   return (
     <>
-      <div className="flex gap-2">
-        <ParadasBusSelect
-          initialParada={initialParada}
-          onParadaChange={handleParadaChange}
-        />
+      <div className="flex gap-2 w-full">
+        <div className="flex-1 min-w-0">
+          <ParadasBusSelect
+            initialParada={initialParada}
+            onParadaChange={handleParadaChange}
+            favorites={favorites}
+          />
+        </div>
+        {selectedParada && (
+          <Button
+            variant={isFavorite ? "default" : "outline"}
+            size="icon"
+            className="flex-shrink-0"
+            onClick={handleToggleFavorite}
+            aria-label={isFavorite ? "Quitar de favoritos" : "Añadir a favoritos"}
+          >
+            {isFavorite ? (
+              <Star className="h-4 w-4 fill-current" />
+            ) : (
+              <Star className="h-4 w-4" />
+            )}
+          </Button>
+        )}
       </div>
       <div className="flex justify-between gap-2 mt-4 mb-2 px-4">
         <div className="inline-flex items-center gap-2 text-sm font-medium text-zinc-900 dark:text-zinc-100">

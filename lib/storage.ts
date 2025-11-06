@@ -62,3 +62,41 @@ export function toggleStoredMetroInvert(): boolean {
   localStorage.setItem('metroInvert', JSON.stringify(newValue));
   return newValue;
 }
+
+export function getFavoriteParadasBus(): ParadaBus[] {
+  if (typeof window === 'undefined') return [];
+
+  const stored = localStorage.getItem('favoriteParadasBus');
+  return stored ? JSON.parse(stored) : [];
+}
+
+export function setFavoriteParadasBus(paradas: ParadaBus[]): void {
+  if (typeof window === 'undefined') return;
+  localStorage.setItem('favoriteParadasBus', JSON.stringify(paradas));
+}
+
+export function toggleFavoriteParadaBus(parada: ParadaBus): boolean {
+  if (typeof window === 'undefined') return false;
+
+  const favorites = getFavoriteParadasBus();
+  const index = favorites.findIndex(p => p.id === parada.id);
+  
+  if (index > -1) {
+    // Remove from favorites
+    favorites.splice(index, 1);
+    setFavoriteParadasBus(favorites);
+    return false;
+  } else {
+    // Add to favorites
+    favorites.push(parada);
+    setFavoriteParadasBus(favorites);
+    return true;
+  }
+}
+
+export function isFavoriteParadaBus(paradaId: number): boolean {
+  if (typeof window === 'undefined') return false;
+
+  const favorites = getFavoriteParadasBus();
+  return favorites.some(p => p.id === paradaId);
+}

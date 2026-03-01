@@ -12,6 +12,8 @@ export interface ParadaMetro {
   linea: string;
   id: string;
   nombre: string;
+  lat?: number;
+  lon?: number;
 }
 
 export interface LlegadasMetro {

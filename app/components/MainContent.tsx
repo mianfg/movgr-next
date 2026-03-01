@@ -5,12 +5,14 @@ import { Bus } from "@/components/bus/Bus";
 import { About } from "@/components/common/About";
 import { ModeToggle } from "@/components/common/ModeToggle";
 import { Share } from "@/components/common/Share";
+import { Button } from "@/components/ui/button";
 import { Metro } from "@/components/metro/Metro";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ParadaBus } from "@/interfaces/bus";
 import { DireccionMetro, ParadaMetro } from "@/interfaces/metro";
-import { BusFrontIcon, TramFrontIcon } from "lucide-react";
+import { BusFrontIcon, MapIcon, TramFrontIcon } from "lucide-react";
 import Image from "next/image";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 
 type MainContentProps = {
@@ -37,7 +39,14 @@ export function MainContent({ defaultTab, initialParadaMetro, initialParadaBus, 
             <span className="text-[18px] font-bold tracking-wide">GR</span>
           </div>
         </div>
-        <ModeToggle />
+        <div className="flex items-center gap-2">
+          <Button variant="outline" size="icon" asChild>
+            <Link href="/map">
+              <MapIcon className="h-4 w-4" />
+            </Link>
+          </Button>
+          <ModeToggle />
+        </div>
       </div>
       <div className="flex-1 min-h-0 px-4 w-full max-w-[400px] mx-auto">
         <Tabs defaultValue={defaultTab} className="h-full flex flex-col" onValueChange={handleTabChange}>

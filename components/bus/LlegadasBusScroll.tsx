@@ -1,9 +1,9 @@
 "use client";
 
+import { LineBadge } from "@/components/map/LineBadge";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { LlegadasBus, ParadaBus } from "@/interfaces/bus";
 import { CircleOffIcon, CloudAlertIcon, Loader2Icon, MousePointerClickIcon } from "lucide-react";
-import Image from "next/image";
 import { useEffect, useRef } from "react";
 import { Badge } from "../ui/badge";
 
@@ -37,12 +37,10 @@ export function LlegadasBusScroll({ llegadas, parada, isLoading, isOnline }: Lle
           <ol className="flex flex-col gap-4">
             {llegadas?.proximos.map((proximo, index) => (
               <li key={index} className="flex w-full items-center gap-4">
-                <Image
-                  src={`/bus/lineas/${proximo.linea.id}.png`}
-                  className="h-8 w-8 flex-shrink-0"
-                  alt={`Icono de línea ${proximo.linea.id}`}
-                  width={40}
-                  height={40}
+                <LineBadge
+                  id={proximo.linea.id}
+                  color={proximo.linea.color}
+                  textColor={proximo.linea.text_color}
                 />
                 <div className="flex-1 min-w-0 max-w-[60%]">
                   <div className="text-sm">{proximo.linea.nombre}</div>

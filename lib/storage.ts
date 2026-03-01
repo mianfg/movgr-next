@@ -17,7 +17,13 @@ export function getStoredParada(): ParadaMetro | undefined {
   if (typeof window === 'undefined') return undefined;
 
   const stored = localStorage.getItem('paradaMetro');
-  return stored ? JSON.parse(stored) : undefined;
+  if (!stored) return undefined;
+  const parada: ParadaMetro = JSON.parse(stored);
+  if (parseInt(parada.id) >= 100) {
+    parada.id = String(parseInt(parada.id) - 100);
+    setStoredParada(parada);
+  }
+  return parada;
 }
 
 export function setStoredParada(parada: ParadaMetro | undefined): void {

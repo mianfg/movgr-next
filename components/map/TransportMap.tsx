@@ -14,8 +14,9 @@ import { LineaBusDetail, LineaMetroDetail } from "@/interfaces/map";
 import { getParadasBus, getLineasBus, getLineaBusDetail } from "@/lib/bus";
 import { getParadasMetro, getLineaMetroDetail } from "@/lib/metro";
 import { ArrowLeftIcon, BusFrontIcon, LocateIcon, RouteIcon, TramFrontIcon } from "lucide-react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 
+import { Share } from "@/components/common/Share";
 import { StopDrawer } from "./StopDrawer";
 
 const GRANADA_CENTER: L.LatLngExpression = [37.176, -3.599];
@@ -179,6 +180,7 @@ function TransportMapInner({
 
 export function TransportMap() {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const [busStops, setBusStops] = useState<ParadaBus[]>([]);
   const [metroStops, setMetroStops] = useState<ParadaMetro[]>([]);
   const [busLineas, setBusLineas] = useState<LineaBus[]>([]);
@@ -210,9 +212,37 @@ export function TransportMap() {
       });
   }, []);
 
+  useEffect(() => {
+    const id = searchParams.get("id");
+    if (!id) return;
+    const mode = searchParams.get("mode");
+    if (mode === "metro" || (!mode && metroStops.some((s) => s.id === id))) {
+      const stop = metroStops.find((s) => s.id === id);
+      if (stop) setSelectedStop({ type: "metro", parada: stop });
+      return;
+    }
+    const numericId = Number(id);
+    const stop = busStops.find((s) => s.id === numericId);
+    if (stop) setSelectedStop({ type: "bus", parada: stop });
+  }, [busStops, metroStops, searchParams]);
+
+  const syncUrl = useCallback((stop: SelectedStop) => {
+    const params = new URLSearchParams();
+    if (stop?.type === "bus") {
+      params.set("mode", "bus");
+      params.set("id", String(stop.parada.id));
+    } else if (stop?.type === "metro") {
+      params.set("mode", "metro");
+      params.set("id", stop.parada.id);
+    }
+    const query = params.toString();
+    router.replace(query ? `/map?${query}` : "/map", { scroll: false });
+  }, [router]);
+
   const handleStopClick = useCallback((stop: SelectedStop) => {
     setSelectedStop(stop);
-  }, []);
+    syncUrl(stop);
+  }, [syncUrl]);
 
   return (
     <div className="h-[100dvh] w-full relative">
@@ -277,6 +307,10 @@ export function TransportMap() {
         </Button>
       </div>
 
+      <div className="absolute bottom-6 left-4 z-[1000]">
+        <Share compact />
+      </div>
+
       <div className="absolute bottom-6 right-4 z-[1000]">
         <Button
           id="locate-btn"
@@ -291,7 +325,10 @@ export function TransportMap() {
 
       <StopDrawer
         selectedStop={selectedStop}
-        onClose={() => setSelectedStop(null)}
+        onClose={() => {
+          setSelectedStop(null);
+          syncUrl(null);
+        }}
         busLineasMap={busLineasMap}
       />
     </div>

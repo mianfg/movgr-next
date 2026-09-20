@@ -1,6 +1,7 @@
 "use client";
 
 import dynamic from "next/dynamic";
+import { Suspense } from "react";
 
 const TransportMap = dynamic(
   () => import("@/components/map/TransportMap").then((mod) => mod.TransportMap),
@@ -8,5 +9,9 @@ const TransportMap = dynamic(
 );
 
 export default function MapPage() {
-  return <TransportMap />;
+  return (
+    <Suspense>
+      <TransportMap />
+    </Suspense>
+  );
 }

@@ -42,6 +42,14 @@ export const metadata = {
     type: 'website',
   },
   metadataBase: new URL('https://movgr.mianfg.me'),
+  ...(process.env.NEXT_PUBLIC_IOS_APP_STORE_ID
+    ? {
+        itunes: {
+          appId: process.env.NEXT_PUBLIC_IOS_APP_STORE_ID,
+          appArgument: 'https://movgr.mianfg.me',
+        },
+      }
+    : {}),
 };
 
 export default function RootLayout({

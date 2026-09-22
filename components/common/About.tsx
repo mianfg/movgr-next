@@ -45,7 +45,7 @@ export function About() {
           </DrawerHeader>
           <div className="p-4 text-sm flex flex-col gap-2">
             <p><span className="font-semibold">MovGR</span> te permite seguir el transporte público de Granada en tiempo real.</p>
-            <p>Esta aplicación es de código abierto y es y será siempre gratuita. Además, respeta tu privacidad. Más información <Link href="https://mianfg.me/privacy" className="underline">aquí</Link>.</p>
+            <p>Esta aplicación es de código abierto y es y será siempre gratuita. Además, respeta tu privacidad. Más información <Link href="/privacy" className="underline">aquí</Link>.</p>
             {false && <Alert className="mt-4">
               <AlertDescription>
                 <p>Esta aplicación es gratuita y siempre lo será, pero su mantenimiento conlleva ciertos costes. Si te gusta y te resulta útil, puedes invitarme a un café.</p>

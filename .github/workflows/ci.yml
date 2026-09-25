@@ -23,7 +23,8 @@ jobs:
           set -euo pipefail
           if [ -f pnpm-lock.yaml ]; then
             corepack enable
-            pnpm install --frozen-lockfile --config.dangerouslyAllowAllBuilds=true
+            echo 'dangerouslyAllowAllBuilds=true' >> .npmrc
+            pnpm install --frozen-lockfile
             RUN="pnpm"
           elif [ -f yarn.lock ]; then
             yarn install --frozen-lockfile
